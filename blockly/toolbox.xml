@@ -1,0 +1,48 @@
+<category id="catEim">
+  <category id="catEimCore">
+    <block type="console">
+      <value name="console">
+        <block type="eim_info"></block>
+      </value>
+    </block>
+    <block type="variables_set">
+      <field name="VAR">eim</field>
+      <value name="VALUE">
+        <block type="eim_create"></block>
+      </value>
+    </block>
+    <block type="eim_broadcast">
+      <value name="topic">
+        <block type="text">
+          <field name="TEXT">eim/python</field>
+        </block>
+      </value>
+      <value name="payload">
+        <block type="text">
+          <field name="TEXT">print("hello")</field>
+        </block>
+      </value>
+    </block>
+    <block type="console">
+      <value name="console">
+        <block type="eim_message"></block>
+      </value>
+    </block>
+    <block type="console">
+      <value name="console">    
+        <block type="dict_get">
+          <value name="dict">
+            <block type="eim_message"></block>
+          </value>
+        </block>  
+      </value>
+    </block>
+    <block type="eim_listen">
+      <value name="topic">
+        <block type="text">
+          <field name="TEXT">eim/python</field>
+        </block>
+      </value>
+    </block>
+  </category>
+</category>

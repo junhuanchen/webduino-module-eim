@@ -1,0 +1,25 @@
+{
+  "types": [
+    "eim_broadcast",
+    "eim_message",
+    "eim_create",
+    "eim_listen",
+    "eim_info",
+    "dict_get"
+  ],
+  "category": "eim",
+  "scripts": [
+    "https://raw.githubusercontent.com/yarrem/stringFormat.js/master/format.js",
+    "eim-blockly.js",
+    "blockly/blocks.js",
+    "blockly/javascript.js"
+  ],
+  "dependencies": [
+    "https://raw.githubusercontent.com/yarrem/stringFormat.js/master/format.js",
+    "https://cdn.bootcss.com/socket.io/2.2.0/socket.io.slim.js",
+    "eim.js"
+  ],
+  "msg": "blockly/msg",
+  "blocksMsg": "blockly/msg/blocks",
+  "toolbox": "blockly/toolbox.xml"
+}
