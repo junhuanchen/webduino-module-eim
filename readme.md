@@ -8,11 +8,11 @@
 
 [webduino blockly](https://bit.webduino.com.cn/blockly)
 
-![webduino blockly](readme/webduino blockly.png)
+![webduino blockly](.\readme\webduino blockly.png)
 
 [codelab scratch3](https://scratch3.codelab.club/)
 
-![codelab scratch3](readme/codelab scratch3.png)
+![codelab scratch3](.\readme\codelab scratch3.png)
 
 介绍一下两者的特色。
 
