@@ -9,13 +9,13 @@
   ],
   "category": "eim",
   "scripts": [
-    "https://raw.githubusercontent.com/yarrem/stringFormat.js/master/format.js",
+    "stringFormat.js",
     "eim-blockly.js",
     "blockly/blocks.js",
     "blockly/javascript.js"
   ],
   "dependencies": [
-    "https://raw.githubusercontent.com/yarrem/stringFormat.js/master/format.js",
+    "stringFormat.js",
     "https://cdn.bootcss.com/socket.io/2.2.0/socket.io.slim.js",
     "eim.js"
   ],
