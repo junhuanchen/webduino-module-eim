@@ -8,11 +8,11 @@
 
 [webduino blockly](https://bit.webduino.com.cn/blockly)
 
-![webduino blockly](readme\blockly.png)
+![blockly](./readme/blockly.png)
 
 [codelab scratch3](https://scratch3.codelab.club/)
 
-![codelab scratch3](readme\scratch3.png)
+![scratch3](./readme/scratch3.png)
 
 介绍一下两者的特色。
 
@@ -36,19 +36,36 @@
 
 ## 目录
 
-1. 了解一下 [Blockly](https://developers.google.cn/blockly/)
-2. 了解一些积木的开发模式
+1. 什么是 [Blockly](https://developers.google.cn/blockly/)
+2. 了解一些积木的开发
 3. 认识  [Blockly 积木开发工具](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html)
 4. 导入 Webduino Blockly 运行环境
-5. 分离测试 Blockly 积木代码和 JavaScript 代码
-6. 为积木准备多语言变量
-7. 
+5. 编写 实际运行的 JavaScript 代码
+6. 准备 Blockly 积木生产的代码
+7. 最后给积木添加多语言变量
 
+把你的作品，分享给你的朋友吧
 
+## 什么是 [Blockly](https://developers.google.cn/blockly/)
 
+复杂的我就不说了，简单来说吧，看下图。
 
+![blockly_to_code](./readme/blockly_to_code.png)
 
+可以看到它将积木转变成了代码，如果你想要体验的话，可以访问 [google blockly](https://developers.google.com/blockly/) 来体验一下，此时你应该知道 Blockly 就是指 谷歌开发的一种 积木 生成 代码的工具。
 
-本文将作为 Webduino 积木开发指导，详细指导你如何将自定义积木导入webduino-blockly。
+但这只是表面的东西，我们作为开发者，需要知道的是积木的开发方式，也就是下一节
 
-在本文你将学到如何使用Blockly开发积木
+## 了解一些积木的开发
+
+一切从简，直接来这里。
+
+1. 国外源[Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
+
+2. 国内源[Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用下面的）
+
+![blockly_developer](./readme/blockly_developer.png)
+
+直接看实例，挑几个基本的来讲。
+
+点击 Import Block Library 选择 [library.xml](https://junhuanchen.github.io/webduino-module-eim/library.xml) （需要下载出来）
