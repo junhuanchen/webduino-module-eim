@@ -9,7 +9,7 @@
   'use strict';
 
   scope.eim_create = function (eim_name) {
-    return "(new webduino.module.EIM('{0}'))".format(eim_name);
+    return "new webduino.module.EIM('{0}')".format(eim_name);
   }
 
   scope.eim_broadcast = function (eim, topic, payload) {
@@ -47,10 +47,8 @@
     code += 'setInterval(function () { {0}; }, 5000);\n'.format(eim_broadcast("eim", "'eim/python'", "'print(\"hello\")'"));
   
     console.log(code);
-    eval(code);
+    // eval(code);
     return code;
   }
 
 }));
-
-eim_unit_test()
