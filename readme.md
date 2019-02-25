@@ -4,7 +4,7 @@
 
 ## 前言
 
-本文是为以下两个软件体系联系在一起所做。
+本文是为以下两个软件体系联系在一起所做，阅读者需要 Nodejs 和 JavaScript 的前置技能，包括对 Blockly 的基本使用常识，如果没有一丁点的资料查阅能力，就没必要看这篇文章了，本文不适合没有学习能力的开发者。
 
 [webduino blockly](https://bit.webduino.com.cn/blockly)
 
@@ -50,7 +50,7 @@
 
 1. 国外源 [Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
 
-2. 国内源 [Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用下面的）
+2. 国内源 [Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用这个）
 
 ![blockly_developer](./readme/blockly_developer.png)
 
@@ -179,6 +179,10 @@ Blockly.JavaScript['eim_info'] = function(block) {
 
 ![blockly_load](./readme/blockly_load.png)
 
+这样你就完成了积木的导入，如下图。
+
+![blockly_load_res](./readme/blockly_load_res.png)
+
 #### 在 Github 中得到自定义积木的链接
 
 如何得到这个 `https://junhuanchen.github.io/webduino-module-eim/blockly.json` 链接，在此我也会做一个示范，比如你把本项目 Fork 了，但此时你还是无法按我上述所给的网址进行你的插件链接的，还需要按下图的方式去设置你 Frok 项目就可以了。
@@ -211,8 +215,166 @@ Blockly.JavaScript['eim_info'] = function(block) {
 
 Webduino Blockly 保持谷歌的原滋原味，并为它添加了一些物联网的积木，和谷歌稍微有些不一样的地方是，Webduino Blockly 是 Blockly 的 JavaScript 运行环境，也就是说，在 Blockly 的基础上，添加了 Js 代码的运行环境。
 
-
 如果你有用过其他 Blockly 网站，那它其他 Blockly 网站设计不同的地方在于，你可以不依赖任何网站，也可以积累下自己的 Blockly 积木和代码库，借助本文所说的，你可以不需要部署任何东西，就可以将自己制作的积木作品分享给他人。
 
-先看 blockly.json ，这里就将积木导入网站中所用的文件。
+先解释一下 [blockly.json](https://github.com/junhuanchen/webduino-module-eim/blob/master/blockly.json) 的文件定义，这里就将指出哪些代码需要导入积木网站中。
+
+```javascript
+{
+  "types": [ // types 以下都是积木的定义声明，没有在这里添加声明的积木名称将无法使用。
+    "eim_broadcast",
+    "eim_message",
+    "eim_create",
+    "eim_listen",
+    "eim_info", // 下文我会以此 eim_info 积木 作为基础例子
+    "dict_get"
+  ],
+  "category": "eim", // 这个是一个不重要的列表分离，表示该积木插件所属的列表。
+  "scripts": [ // 此处声明的脚本是 定义积木 时所用的脚本依赖，注意它不与 dependencies 的共用
+    "stringFormat.js", // 一个简易的字符串 format 库
+    "eim-blockly.js", // 提供 blockly 代码生成的接口分离文件（我会细说）
+    "blockly/blocks.js", // Blockly 开发工具提供
+    "blockly/javascript.js" // Blockly 开发工具提供
+  ],
+  "dependencies": [ // 此处声明的脚本是 积木生成代码 在运行的时候所需要的依赖项，要注意依赖的先后顺序。
+    "stringFormat.js",
+    "https://cdn.bootcss.com/socket.io/2.2.0/socket.io.slim.js", // 从外网获取的 js 依赖。
+    "eim.js" // eim 内部实现的代码。
+  ],
+  "msg": "blockly/msg", // 提供全局语言变量的文件夹
+  "blocksMsg": "blockly/msg/blocks", // 提供积木自身语言变量的文件夹
+  "toolbox": "blockly/toolbox.xml" // 定义提供的积木列表
+}
+```
+
+现在你只需要粗略看一下上方代码中的提供的注释项，因为这些文档说明我是不会将其写进源代码中的，现在看不懂没关系，之后我都会依次说明，本文将作为标准的官方积木定义说明书提供给大家，所以尽管放心，知无不言，言无不尽。
+
+### 第三步，制作属于你的 Blockly 积木拓展包
+
+先从一个结果开始说起吧，我们先使用它，然后依次说明如何得到它，包含具体实现。
+
+![eim_info_use](./readme/eim_info_use.png)
+
+选择它，并拖出来，确认后看它生成的代码，然后来到项目里看对应的代码。
+
+![eim_info_res](./readme/eim_info_res.png)
+
+我们可以知道 `console.log(("every is message!"));` 这段代码就是在运行一个控制台输出（F12），如下图所示。
+
+![eim_info_run](./readme/eim_info_run.png)
+
+现在你就知道，如何 拖拽积木 和 运行积木 了。
+
+那么这是怎么做到的呢？
+
+记得最开始的积木定义的开发工具吧，如下图。
+
+![eim_info](./readme/eim_info.png)
+
+实际上，你可以在本项目的 [blockly/blocks.js](https://github.com/junhuanchen/webduino-module-eim/blob/a1d9951e146865eeadcf5ed02e03f93b8e0fe408/blockly/blocks.js#L61-L70) 文件里看到它的 Block Definition 的定义，同样也可以在  [blockly/javascript.js](https://github.com/junhuanchen/webduino-module-eim/blob/a1d9951e146865eeadcf5ed02e03f93b8e0fe408/blockly/javascript.js#L36-L41) 看到它的 Generator stub 实现。
+
+我直接拿代码回来，你可能就比较眼熟了。
+
+blockly/blocks.js
+
+```javascript
+Blockly.Blocks['eim_info'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.eim_info);
+    this.setOutput(true, null);
+    this.setColour(180);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+```
+
+blockly/javascript.js
+
+```javascript
+Blockly.JavaScript['eim_info'] = function (block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = '"{0}"'.format(Blockly.Msg.eim_info);
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+和上图比较一下发现是不是很相似了，其实就是这样使用它的，非常简单。
+
+透过积木开发工具生成，然后放到对应的位置就可以了。
+
+但仅仅是这样还无法把积木载入到 Webduino Blockly ，你还需要到 [blockly.json](https://github.com/junhuanchen/webduino-module-eim/blob/a1d9951e146865eeadcf5ed02e03f93b8e0fe408/blockly.json#L2-L9) 去添加你的积木名称（name）。
+
+blockly.json
+
+```javascript
+{
+  "types": [
+    "eim_broadcast",
+    "eim_message",
+    "eim_create",
+    "eim_listen",
+    "eim_info",
+    "dict_get"
+  ],
+  ....
+}
+```
+
+虽然说添加的积木功能，但还差最后一步，就是将它放到工具列表里，否则的话，别人就没办法从工具栏里拖拽出来了，所以看下图的效果。
+
+![blockly_eim_tools](./readme/blockly_eim_tools.png)
+
+它其实对应的位置在 [blockly/toolbox.xml](https://github.com/junhuanchen/webduino-module-eim/blob/a1d9951e146865eeadcf5ed02e03f93b8e0fe408/blockly/toolbox.xml#L3-L6) 的这里，按顺序提供的。
+
+```xml
+<category id="catEim">
+  <category id="catEimCore">
+
+    <block type="console">
+      <value name="console">
+        <block type="eim_info"></block>
+      </value>
+    </block>
+
+    ....
+  </category>
+</category>
+```
+
+你可以自己添加一条 `<block type="eim_info"></block>` 进去试试看，它就会变成单独的积木而不被结合，我这里只是做了一个和其他积木结合的例子供你感受一下。
+
+代码可以改写成类似这样的，相信我，不会出错的，错了就提交 issue 并截图 XD。
+
+
+```xml
+<category id="catEim">
+  <category id="catEimCore">
+
+    <block type="eim_info"></block>
+
+  </category>
+</category>
+```
+
+效果就会变成这样，我只是跑到 Blockly Developer Tools 的 Workspace Factory 那里截图了而已 XD。
+
+![eim_info_mod](./readme/eim_info_mod.png)
+
+所以你现在知道怎么在 Webduino Blockly 中添加积木了吧。
+
+总结一下就是：
+
+1. 在 Blockly Developer Tools 中设计积木。
+2. 以 本项目 为基础，改写成自己的积木插件。
+3. 复制和粘贴你所设计的积木的两个定义（Block Definition 和 Generator stub:）到对应的位置。（blockly/blocks.js 和 blockly/javascript.js）
+4. 然后在 blockly/tools.js 对积木的使用做一个列表调用示范，方便你的使用者。
+5. 最后修改 blockly.json 把自己的积木添加到其中。
+
+以上积木的载入大功告成。
+
+### 第四步，为你的积木插件添加具体的代码和功能
+
 
