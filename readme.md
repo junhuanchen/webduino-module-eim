@@ -370,10 +370,10 @@ blockly.json
 1. 在 Blockly Developer Tools 中设计积木。
 2. 以 本项目 为基础，改写成自己的积木插件。
 3. 复制和粘贴你所设计的积木的两个定义（Block Definition 和 Generator stub:）到对应的位置。（blockly/blocks.js 和 blockly/javascript.js）
-4. 然后在 blockly/tools.js 对积木的使用做一个列表调用示范，方便你的使用者。
-5. 最后修改 blockly.json 把自己的积木添加到其中。
+4. 然后在 blockly/tools.js 对积木的使用做一个调用示范的列表，方便你的使用者取出来应用。
+5. 最后修改 blockly.json 把自己的积木添加到其中（types）。
 
-以上积木的载入大功告成。
+以上动态积木的载入大功告成。
 
 ### 第四步，为你的积木插件添加具体的代码和功能
 
