@@ -35,7 +35,7 @@ Blockly.JavaScript['eim_listen'] = function (block) {
 
 Blockly.JavaScript['eim_info'] = function (block) {
   // TODO: Assemble JavaScript into code variable.
-  var code = Blockly.Msg.eim_info;
+  var code = '"{0}"'.format(Blockly.Msg.eim_info);
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
