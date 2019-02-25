@@ -34,19 +34,7 @@
 
 长话短说，让我们开始吧。
 
-## 目录
-
-1. 什么是 [Blockly](https://developers.google.cn/blockly/)
-2. 了解一些积木的开发
-3. 认识  [Blockly 积木开发工具](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html)
-4. 导入 Webduino Blockly 运行环境
-5. 编写 实际运行的 JavaScript 代码
-6. 准备 Blockly 积木生产的代码
-7. 最后给积木添加多语言变量
-
-把你的作品，分享给你的朋友吧
-
-## 什么是 [Blockly](https://developers.google.cn/blockly/)
+## 什么是 [Blockly](https://developers.google.cn/blockly/) ？
 
 复杂的我就不说了，简单来说吧，看下图。
 
@@ -56,16 +44,175 @@
 
 但这只是表面的东西，我们作为开发者，需要知道的是积木的开发方式，也就是下一节
 
-## 了解一些积木的开发
+## 认识 Blockly 积木
 
 一切从简，直接来这里。
 
-1. 国外源[Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
+1. 国外源 [Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
 
-2. 国内源[Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用下面的）
+2. 国内源 [Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用下面的）
 
 ![blockly_developer](./readme/blockly_developer.png)
 
-直接看实例，挑几个基本的来讲。
+进入网站以后，点击右上角的 [Import Block Library] 选择 [library.xml](https://github.com/junhuanchen/webduino-module-eim/blob/master/library.xml) （需将该文件保存到本地后选取导入）
 
-点击 Import Block Library 选择 [library.xml](https://junhuanchen.github.io/webduino-module-eim/library.xml) （需要下载出来）
+载入 `library.xml` 后点击 [Block Library] 此时会看到有我设计的一些积木。
+
+![list_lib](./readme/list_lib.png)
+
+所以我们直接看实例，专挑几个常用的基本积木来讲。
+
+如图中所示，下拉选择 eim_info 积木确认后，将载入该积木。（不管任何提示，确定就对了）
+
+![eim_info](./readme/eim_info.png)
+
+现在就是准备好积木的开发环境了，具体的用法我也且先不谈，因为你可以去看其他人写好的关于这方面的资料，下面是一些我看过的 Blockly 开发的基本操作说明。
+
+1. [Blockly 创建自定义块-概述](https://itbilu.com/other/relate/H1huYbEWQ.html)
+2. [Blockly 创建自定义块-Blockly 开发者工具](https://itbilu.com/other/relate/r1IhFZV-X.html)
+
+更详细和可靠的内容，你需要看 [google blockly](https://developers.google.com/blockly/) 的标准开发文档。
+
+## 开发 Blockly 积木
+
+基于上节可以知道积木是通过上述网站得到的，所以现在来试着开发它们。
+
+比如说我们载入的这个 `eim_info` 积木。
+
+![eim_info_1](./readme/eim_info_1.png)
+
+我们可以在 [Workspace Factory] 中测试它的应用方式，你也可以在这里对自己的积木进行功能核对。
+
+![eim_info_2](./readme/eim_info_2.png)
+
+但开发工具得到的主要就以下两个部分。
+
+1. 积木的样式描述
+
+（注意下拉选择的是 JavaScript，而默认是显示 JSON）
+
+![eim_info_3](./readme/eim_info_3.png)
+
+这些代码的功能用途是对 积木的外观做一个定义，所以这就是积木的外观代码。
+
+```javascript
+Blockly.Blocks['eim_info'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("every is message!");
+    this.setOutput(true, null);
+    this.setColour(180);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+```
+
+虽然有设计器了，但还是要简单解释一下这些函数的基本功能。
+
+- appendDummyInput 给这个积木添加一个没有参数的输入接口。
+- appendField  给这个积木的输入接口添加一个文本参数，仅做为积木的文本显示用。
+- setOutput 给积木准备一个输出，如果没有它就没有办法 被 其他积木给结合了。
+- setColour 设置积木的颜色。
+- setTooltip 设置积木的自动提示，当用户不知道这个积木的详细用途的时候，可以在这里进行补充说明。
+- setHelpUrl 设置跳转的辅助文档网站，如果需要可以链接到其他地方来进行文档的说明。
+
+更多的说明你需要看这个 [define-blocks](https://developers.google.cn/blockly/guides/create-custom-blocks/define-blocks) ，就可以知道所有积木的设计规则。
+
+2. 积木的生成函数
+
+积木的外观设计完成后就到积木生成的代码了，这个地方我只做 JavaScript 的示范，其他的不属于 Webduino-Blockly 需要考虑的范围。
+
+![eim_info_5](./readme/eim_info_5.png)
+
+可以看到如下代码，注意 `var code = '...'` ，这里的变量就是要生成的代码，所以在这里，得到的就是 ... 代码。
+
+```javascript
+Blockly.JavaScript['eim_info'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+举个例子，就可以变成这样。
+
+```javascript
+Blockly.JavaScript['eim_info'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = 'console.log("eim_info")';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+这样在拖动积木的时候就会出现 `console.log("eim_info")` 了，实际的使用方式将在下面应用的时候涉及到。
+
+但至少你现在知道了 Blockly 的开发工具仅仅是为了上述两件事。
+
+## 应用 Blockly 积木
+
+现在我将进入真正意义上的 Webduino-Blockly 开发，在开始应用积木到 Webduino 网站之前，我们先对积木插件的结构有一个大概的认识。
+
+如下图，也就是本积木模块的 github 项目，它就相当于一个基本的积木开发框架了。
+
+![blockly_eim](./readme/blockly_eim.png)
+
+注意到红圈就可以了，我会依次按顺序展开说明的，因为我踩了很多坑，所以我会重新调整开发顺序，让后来人少走弯路。
+
+总共有如下几块步骤，依次掌握以后，你就学会了。
+
+1. 导入写好的积木项目到网站中，并看到运行效果。
+
+2. 忽略细节，基于可用的积木项目进行修改后提交。
+
+3. 在 Webduino Blockly 里提供的 JS bin 进行代码的功能测试。
+
+### 第一步，学会导入积木到 Webduino-Blockly
+
+先来一个直观的感受吧，进入 [Webduino Blockly](https://bit.webduino.com.cn/blockly ) 网站，直接点左下角的菜单项目。
+
+![webduino](./readme/webduino.png)
+
+然后直接导入本项目进去，注意链接是 `https://junhuanchen.github.io/webduino-module-eim/blockly.json` ，如图所示。
+
+![blockly_load](./readme/blockly_load.png)
+
+#### 在 Github 中得到自定义积木的链接
+
+如何得到这个 `https://junhuanchen.github.io/webduino-module-eim/blockly.json` 链接，在此我也会做一个示范，比如你把本项目 Fork 了，但此时你还是无法按我上述所给的网址进行你的插件链接的，还需要按下图的方式去设置你 Frok 项目就可以了。
+
+1. 进入 fork 项目的 Settings.
+
+![fork_1](./readme/fork_1.png)
+
+2. 下拉到 GitHub Pages 并点击 Choose a theme 按钮。
+
+![fork_3](./readme/fork_3.png)
+
+3. 不管发生了什么，直接选 Select theme 就对了。
+
+![fork_5](./readme/fork_5.png)
+
+4. 此时会跳转回来，这时候你再看到它，就会发现有下图的效果了。
+
+![fork_7](./readme/fork_7.png)
+
+这时候你就可以使用 `https://bpi-steam.github.io/webduino-module-eim/blockly.json`的链接导入到 Webduino-Blockly 中了，让我们来试试吧。
+
+![blockly_load_new](./readme/blockly_load_new.png)
+
+好了，现在你已经知道怎么把积木导入网站了吧，所以我们可以愉快的开始我们的开发了，但这个开发要学会分离，不要像我最开始的时候，一边修改代码，一边导入 blockly ，及其的浪费时间。
+
+所以把本文看懂了再动手，可以省下很多时间喔，如果有不懂的地方可以提 issue 给我谢谢哈。
+
+### 第二步，认识 Webduino Blockly 积木结构
+
+Webduino Blockly 保持谷歌的原滋原味，并为它添加了一些物联网的积木，和谷歌稍微有些不一样的地方是，Webduino Blockly 是 Blockly 的 JavaScript 运行环境，也就是说，在 Blockly 的基础上，添加了 Js 代码的运行环境。
+
+
+如果你有用过其他 Blockly 网站，那它其他 Blockly 网站设计不同的地方在于，你可以不依赖任何网站，也可以积累下自己的 Blockly 积木和代码库，借助本文所说的，你可以不需要部署任何东西，就可以将自己制作的积木作品分享给他人。
+
+先看 blockly.json ，这里就将积木导入网站中所用的文件。
+
