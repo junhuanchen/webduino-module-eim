@@ -43,7 +43,6 @@
 
     proto.sendto = function (topic, payload) {
         this.socket.emit("actuator", {
-            name: this.name,
             topic: topic,
             payload: payload,
         });
