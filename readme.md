@@ -55,7 +55,7 @@
 
 ![blockly_developer](./readme/blockly_developer.png)
 
-进入网站以后，点击右上角的 [Import Block Library] 选择 [library.xml](https://github.com/junhuanchen/webduino-module-eim/blob/master/library.xml) （需将该文件保存到本地后选取导入）
+进入网站以后，点击右上角的 [Import Block Library] 选择 [demos/library.xml](https://github.com/junhuanchen/webduino-module-eim/blob/master/demos/library.xml) （需将该文件保存到本地后选取导入）
 
 载入 `library.xml` 后点击 [Block Library] 此时会看到有我设计的一些积木。
 
