@@ -1,0 +1,132 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="variables_set" id="o|S}Jbzj!c)jAu*Vy_,s" x="38" y="63">
+    <field name="VAR">eim</field>
+    <value name="VALUE">
+      <block type="eim_create" id="LZkkzDnx:!m!FrDbJ3~}">
+        <field name="eim_name">python</field>
+      </block>
+    </value>
+    <next>
+      <block type="eim_broadcast" id="Q{W^`[,UvbNyA0`_M:@k">
+        <field name="eim">eim</field>
+        <value name="topic">
+          <block type="text" id="sQ/,cP0_JyiHz9XH_.W~">
+            <field name="TEXT">eim/mpfshell/open</field>
+          </block>
+        </value>
+        <value name="payload">
+          <block type="text" id="D#=35A:eKK9S^q~WI8@(">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+        <next>
+          <block type="eim_broadcast" id="V@R=#blhaE+dS;WLn,(3">
+            <field name="eim">eim</field>
+            <value name="topic">
+              <block type="text" id=";6`ovsg_Mhl7v91l5-I(">
+                <field name="TEXT">eim/mpfshell/exec</field>
+              </block>
+            </value>
+            <value name="payload">
+              <block type="text" id="IRE==RHKRt[A0x3SF/e8">
+                <field name="TEXT">print('bpibit')</field>
+              </block>
+            </value>
+            <next>
+              <block type="eim_broadcast" id="s|afo=74XuW)j/.Y#:RG">
+                <field name="eim">eim</field>
+                <value name="topic">
+                  <block type="text" id="dbcKdh3@ZLz4D;Y0jVX#">
+                    <field name="TEXT">eim/mpfshell/exec</field>
+                  </block>
+                </value>
+                <value name="payload">
+                  <block type="text" id=";_@EIeD}~U-fJeSFETgG">
+                    <field name="TEXT">from microbit import *</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="eim_broadcast" id="J(Ly;:3fn|Eei=U)[M00">
+                    <field name="eim">eim</field>
+                    <value name="topic">
+                      <block type="text" id=".RQ+Elaj2{7lLr}k2`Vg">
+                        <field name="TEXT">eim/mpfshell/exec</field>
+                      </block>
+                    </value>
+                    <value name="payload">
+                      <block type="text" id="zG,G/~FL@(-rp|s6Z?bZ">
+                        <field name="TEXT">display.show('2')</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+  <block type="eim_listen" id="5g@CrSGYUn0/EGkl4(8t" x="188" y="338">
+    <field name="eim">eim</field>
+    <value name="topic">
+      <block type="text" id="[-2*Z%A4GT]%77yUgLof">
+        <field name="TEXT">eim/mpfshell/exec</field>
+      </block>
+    </value>
+    <statement name="event">
+      <block type="console" id="Y|nGX8|U/l=E)5mp=F^K">
+        <value name="console">
+          <block type="eim_message" id="=aL+J[D6vOKR.]ETXT+i">
+            <field name="eim">eim</field>
+          </block>
+        </value>
+        <next>
+          <block type="console" id="VnH`{IC7m4}OatT;:jj_">
+            <value name="console">
+              <block type="dict_get" id="(yKGzR(2yu63ZP/BzrOX">
+                <field name="payload">payload</field>
+                <value name="dict">
+                  <block type="eim_message" id="(o)QV#U3.J]IP2/]q40)">
+                    <field name="eim">eim</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="eim_listen" id="_E7FT0*W##j!/lq?[wWr" x="38" y="513">
+    <field name="eim">eim</field>
+    <value name="topic">
+      <block type="text" id="x;#s:zdZooRXX5!%mxFd">
+        <field name="TEXT">eim/mpfshell/open</field>
+      </block>
+    </value>
+    <statement name="event">
+      <block type="console" id="W3:odJ{%{,lCo/TPHgrZ">
+        <value name="console">
+          <block type="eim_message" id="36q:hb%:^;v5QLs*?-jY">
+            <field name="eim">eim</field>
+          </block>
+        </value>
+        <next>
+          <block type="console" id="XUt4o_#6VSOl-cfj]w3h">
+            <value name="console">
+              <block type="dict_get" id="`teexhlN:,m-0?S1df/G">
+                <field name="payload">payload</field>
+                <value name="dict">
+                  <block type="eim_message" id="=SF_;mvG/H7vKT/q3#%b">
+                    <field name="eim">eim</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

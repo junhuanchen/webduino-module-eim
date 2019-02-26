@@ -18,7 +18,7 @@
 
     function EIM(eim_name) {
         Module.call(this);
-        this.eim_name = eim_name;
+        this.name = eim_name;
         this.socket = io(`//${adapterHost}:12358` + "/test", {
             transports: ["websocket"]
         });
@@ -43,7 +43,7 @@
 
     proto.sendto = function (topic, payload) {
         this.socket.emit("actuator", {
-            name: eim_name,
+            name: this.name,
             topic: topic,
             payload: payload,
         });
