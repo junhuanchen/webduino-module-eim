@@ -50,7 +50,8 @@
 
 1. 国外源 [Blockly Developer Tools](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)
 
-2. 国内源 [Blockly Developer Tools](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg) （如果你访问不了上面那个的话，就使用这个）
+2. 国内源 [Blockly Developer Tools](http://walkline.wang/blockly/blockfactory/
+) （如果你访问不了上面那个的话，就使用这个，如果还不行，再用这个[备用](https://blockly.yelvlab.cn/google/blockly/demos/blockfactory/index.html?tdsourcetag=s_pctim_aiomsg)）
 
 ![blockly_developer](./readme/blockly_developer.png)
 
@@ -367,6 +368,7 @@ blockly.json
 
 总结一下就是：
 
+
 1. 在 Blockly Developer Tools 中设计积木。
 2. 以 本项目 为基础，改写成自己的积木插件。
 3. 复制和粘贴你所设计的积木的两个定义（Block Definition 和 Generator stub:）到对应的位置。（blockly/blocks.js 和 blockly/javascript.js）
@@ -377,4 +379,43 @@ blockly.json
 
 ### 第四步，为你的积木插件添加具体的代码和功能
 
+虽然你已经能够动态载入自己的积木到网站了，但积木终究只是积木，它还需要对接生成的代码，包括具体的函数运行等等，我们可以看下面这段代码。
 
+blockly/javascript.js
+
+```javascript
+Blockly.JavaScript['eim_info'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+先前已经提过，它是指积木对应的 JavaScript 语言插槽（Generator stub），其实也就是调用一个函数来生成对应的代码（JavaScript）。
+
+我个人在设计积木生成的时候，并不会在这里写代码生成字符串，比如有得人就会设计成这样。
+
+```javascript
+Blockly.JavaScript['eim_info'] = function (block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = "{" + Blockly.Msg.eim_info + "}";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+可以注意到，我写的都是这样的，这是因为加了 stringFormat.js 目的只是为了方便将变量代入代码结构。
+
+blockly/javascript.js
+
+```javascript
+Blockly.JavaScript['eim_info'] = function (block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = '"{0}"'.format(Blockly.Msg.eim_info);
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+因此这个你也需要活用，再来，
