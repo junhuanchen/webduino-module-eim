@@ -17,7 +17,7 @@
   }
 
   scope.eim_listen = function (eim, topic, event) {
-    return "{0}.listen(function (message) {\n if ( '' == {1} || eim.topic == {1} ) {\n {2} }\n})".format(eim, topic, event);
+    return "{0}.listen(function (message) {\n if ( '' == {1} || {0}.topic == {1} ) {\n {2} }\n})".format(eim, topic, event);
   }
 
   scope.eim_payload = function (eim) {
