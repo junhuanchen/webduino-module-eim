@@ -1,6 +1,6 @@
 # Webduino Blockly 之 EIM 拓展的设计与实现
 
-
+本插件地址：`https://junhuanchen.github.io/webduino-module-eim/blockly.json`
 
 ## 前言
 
@@ -418,4 +418,84 @@ Blockly.JavaScript['eim_info'] = function (block) {
 };
 ```
 
-因此这个你也需要活用，再来，
+因此这个你也需要活用，再来，我们开始分离 Blockly 开发 和 JavaScript 开发。
+
+虽然先是学会了定义积木，但这会要求程序设计很严格，如果功力不够可能会设计失败，所以我推荐使用下列的方法进行积木开发，先实现功能，再实现对应的积木接口。
+
+看这里，假设是基于我提供的这个模块开始的话，我在 blockly.json 中的 scripts 和 dependencies 里添加了 stringFormat.js ，这提供了字符串格式化（format）的辅助函数，有利于我们的对代码生成效果的思考。
+
+先看实例，再动手吧！
+
+来，到 [Webduino-blockly](https://bit.webduino.com.cn/blockly/?lang=zh-hans) 中，确认载入了本模块后，拖出一个最简单的积木（如图所示），然后点击图中的 </> 按钮。
+
+![js_bin_into](./readme/js_bin_into.png)
+
+这将跳转到 JS bin，这是一个 JavaScript 的在线开发调试工具。简单介绍一下，我想也不用什么介绍吧，看图就知道了。
+
+![js_bin_view](./readme/js_bin_view.png)
+
+基本的 HTML \ CSS \ JavaScript \ Console \ Output 都有了，翻译过来就是，呃，我也不懂怎么翻译，就是一些网页开发的基本常识了，如果你不清楚网页的基本常识的话，可以看看这个 [HTML 基础](http://www.runoob.com/html/html-tutorial.html)。
+
+在图中的 HTML 框，指得是我们的程序的依赖项，也就是模块在定义 dependencies 的时候默认添加到 JavaScript 运行时当中的，注意，这个和积木运行时是分开的定义，所以我才会在两者之间都放入 stringFormat.js 的依赖，但事实上仅仅只是为了方便我们开发 JavaScript 的时候，顺便开发代码生成函数。
+
+举个例子吧。
+
+![eim_blockly_def](./readme/eim_blockly_def.png)
+
+看 eim-blockly.js ，这是一个 ES5 的 Class 的写法，你可以当它是一个比较向下兼容的做法，我们可以知道，注意这个写法，可能会与你过去认识的 JavaScript 有些不太一样，但实际上你只需要关注内部的函数就好了，其他的都是一些语法的定义，如果你需要仔细了解，可以搜索 ES5 Class 语法。
+
+如图中圈起来的函数所示，如何理解呢？直接 Copy 到 Js Bin 就可以了，如下图。
+
+![js_bin_use](./readme/js_bin_use.png)
+
+注意我复制粘贴后，在 JavaScript 底下写了一行 eim_unit_test() 的单元测试，这其实就对应着左边红圈的函数，然后点击右上角的 Run （运行），就可以看到 Console 里出现的一串字符串，其实就是 eim_unit_test() 函数中的 console.log(code); 输出的内容，这就是分离开发积木代码生成器的方法。
+
+如果你需要运行它，则需要使用被注释的 eval(code) 来测试 eim.js 代码。
+
+现在我们就可以不用将代码直接写入积木生成的代码当中了，而是积木生成模块框架，对接我们在这边进行的代码生成器，举个例子吧。
+
+首先，积木那里会生成类似下图的框架代码。
+
+![eim_info_5](./readme/eim_info_5.png)
+
+blockly/javascript.js
+
+```javascript
+Blockly.JavaScript['eim_info'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+如果我们每次都把类似这样的代码写到里面。
+
+```javascript
+Blockly.JavaScript['eim_info'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  var code = "{0}".format('console.log(code)');
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+```
+
+那么就需要提交代码后，打开网站，把积木载入其中，再拖动积木出来，点击运行，完成这一次的积木功能测试。
+
+如果我们期间发现生成的代码不合心意，那么我们就将上述过程重来一遍，改一行，重来一次，相信我，这会是场噩梦。
+
+所以分离出来后，可以写成下面这样。
+
+![code_demo](./readme/code_demo.png)
+
+相当于，每次变更积木内容的时候，都不需要再改动 blockly/javascript.js 的积木定义了，但就算是这样做，在完全重新设计的积木的时候，还是会有小小的改动的，这个避免不了，不过相比之下，改动要少得太多太多了。
+
+现在你知道我都是怎么开发的吧，因为对我来说，积木是积木，代码是代码，所以只需要在 JS bin 中开发测试功能性代码完成后，再根据功能性代码提供代码生成接口，最后对接积木设计接口即可。
+
+所以分开两个文件来开发，如本项目的 eim-blockly.js 和 eim.js ，作为你学习的例子来说，我认为是足够了，它的功能非常简单，下一章我将会正经地讲解开发一个具体插件的过程。
+
+本章已经交代完所有和积木开发有关的操作和知识了，现在你应该知道如何开发一个积木了吧。
+
+### 实战 Blockly 与 EIM 设计与实现！
+
+#### 认识 EIM 插件
