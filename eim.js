@@ -19,7 +19,7 @@
     function EIM(eim_name) {
         Module.call(this);
         this.name = eim_name;
-        this.socket = io(`//${adapterHost}:12358` + "/test", {
+        this.socket = io(`wss://${adapterHost}:12358` + "/test", {
             transports: ["websocket"]
         });
 
@@ -66,7 +66,7 @@
         setInterval(function () {
             socket.emit("actuator", {
                 topic: "eim/python",
-                payload: "isconnected"
+                payload: "print('hello')"
             });
         }, 5000);
     }
